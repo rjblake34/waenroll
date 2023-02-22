@@ -49,6 +49,8 @@ summary(mod3$glm_res)
 with(summary(mod3$glm_res), 1 - deviance/null.deviance) #print r squared
 ```
 
+NOTE: I AM HAVING A FILEPATH ERROR RELATED TO R MARKDOWN (PANDOC DEPENDENCY FOR KNITR FUNCTION). I AM UNABLE TO PRODUCE
+AN HTML DOCUMENT, BUT THE CODE CHUNKS DO RUN IN SCRIPT.
 
 This analysis relies on data from the Washington State Office of the Superintendent of Public Instruction (OSPI).
 The panel data is created by combining datasets on college enrollment and demographics at the school district level for

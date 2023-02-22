@@ -4,11 +4,10 @@ output: html_notebook
 ---
 
 ```{r}
-setwd('/Users/ryan/DataspellProjects/waenroll')
 library(tidyverse)
 library(miceadds)
 
-df <- read.csv('waenrolldf.csv', header=TRUE)
+df <- read.csv('https://raw.githubusercontent.com/rjblake34/waenroll/main/waenrolldf.csv', header=TRUE)
 ```
 
 Run regressions

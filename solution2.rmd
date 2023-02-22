@@ -1,0 +1,63 @@
+---
+title: "Solution 2"
+output: html_notebook
+---
+
+```{r}
+setwd('/Users/ryan/DataspellProjects/waenroll')
+library(tidyverse)
+library(miceadds)
+
+df <- read.csv('waenrolldf.csv', header=TRUE)
+```
+
+Run regressions
+```{r}
+mod1 <- miceadds::glm.cluster(data=df,
+                              formula = TwoYear ~ LowIncomePct + WhitePct + ELLPct + HighlyCapablePct + FemalePct +
+                                TotalStudents + factor(District) + factor(Year),
+                              cluster = "District",
+                              family='gaussian')
+
+mod2 <- miceadds::glm.cluster(data=df,
+                              formula = FourYear ~ LowIncomePct + WhitePct + ELLPct + HighlyCapablePct + FemalePct +
+                                TotalStudents + factor(District) + factor(Year),
+                              cluster = "District",
+                              family='gaussian')
+
+mod3 <- miceadds::glm.cluster(data=df,
+                              formula = TwoYear+FourYear ~ LowIncomePct + WhitePct + ELLPct + HighlyCapablePct + FemalePct +
+                                TotalStudents + factor(District) + factor(Year),
+                              cluster = "District",
+                              family='gaussian')
+```
+
+Print results of model 1
+```{r}
+summary(mod1$glm_res)
+with(summary(mod1$glm_res), 1 - deviance/null.deviance) #print r squared
+```
+
+Print results of model 2
+```{r}
+summary(mod2$glm_res)
+with(summary(mod2$glm_res), 1 - deviance/null.deviance) #print r squared
+```
+
+Print results of model 3
+```{r}
+summary(mod3$glm_res)
+with(summary(mod3$glm_res), 1 - deviance/null.deviance) #print r squared
+```
+
+
+This analysis relies on data from the Washington State Office of the Superintendent of Public Instruction (OSPI). The panel data is created by combining datasets on college enrollment and demographics at the school district level for each year from 2014 to 2019. The purpose of this analysis is estimate the effect of school district demographic characteristics on college enrollment--i.e., does the makeup of a school district predict how many students choose college after high school?
+
+Three models are estimated in this report. Enrollment at two year, enrollment at four year, and enrollment at either are used as the dependent variables in each model, respectively. The independent variables are rate statistics for low income, whiteness, English language learners, highly capable, female, and district size. All variables are calculated at the district level.
+
+The analysis suggests districts that send more students to college tend to be whiter. However, the analysis also suggests that districts that send more students to college tend to have more low income students, more ELL students, and fewer highly capable students. There are many issues with this methodology that could produce these skewed results, but it's likely that college enrollment is being conflated with dual enrollment. For instance, districts with many highly capable students are more likely to have high rates of two year enrollment and low rates of four year enrollment, likely because many highly capable students are attending their local community college while in high school.
+
+A better use for this panel data is to serve as a control for regression analysis on individual-level microdata from ACS.
+
+The next step for this analysis is to perform a cluster analysis to learn if there are any commonalities among school districts with high college go-on rates, and then to incorporate ACS microdata.
+

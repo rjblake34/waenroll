@@ -3,7 +3,7 @@ title: "Solution 2"
 output: pdf_document
 ---
 
-```{r}
+```{r, message = FALSE}
 library(tidyverse)
 library(miceadds)
 
@@ -11,22 +11,22 @@ df <- read.csv('https://raw.githubusercontent.com/rjblake34/waenroll/main/waenro
 ```
 
 Run regressions
-```{r}
+```{r, message = FALSE}
 mod1 <- miceadds::glm.cluster(data=df,
                               formula = TwoYear ~ LowIncomePct + WhitePct + ELLPct + HighlyCapablePct + FemalePct +
-                                TotalStudents + factor(District) + factor(Year),
+                                TotalStudents,
                               cluster = "District",
                               family='gaussian')
 
 mod2 <- miceadds::glm.cluster(data=df,
                               formula = FourYear ~ LowIncomePct + WhitePct + ELLPct + HighlyCapablePct + FemalePct +
-                                TotalStudents + factor(District) + factor(Year),
+                                TotalStudents,
                               cluster = "District",
                               family='gaussian')
 
 mod3 <- miceadds::glm.cluster(data=df,
                               formula = TwoYear+FourYear ~ LowIncomePct + WhitePct + ELLPct + HighlyCapablePct + FemalePct +
-                                TotalStudents + factor(District) + factor(Year),
+                                TotalStudents,
                               cluster = "District",
                               family='gaussian')
 ```
@@ -61,12 +61,11 @@ used as the dependent variables in each model, respectively. The independent var
 low income, whiteness, English language learners, highly capable, female, and district size. All variables are
 calculated at the district level.
 
-The analysis suggests districts that send more students to college tend to be whiter. However, the analysis also
-suggests that districts that send more students to college tend to have more low income students, more ELL students,
-and fewer highly capable students. There are many issues with this methodology that could produce these skewed results,
-but it's likely that college enrollment is being conflated with dual enrollment. For instance, districts with many
-highly capable students are more likely to have high rates of two year enrollment and low rates of four year enrollment,
-likely because many highly capable students are attending their local community college while in high school.
+Overall, the analysis suggests districts that send more students to college tend to be higher income, less white, and
+have more highly capable students. However, there are significant differences between enrollment level. Districts with
+high levels of two year enrollment tend to be much whiter with much higher populations of low income students than
+districts with high levels of four year enrollment. Districts with high levels of four year enrollment tend to have
+many more highly capable students.
 
 A better use for this panel data is to serve as a control for regression analysis on individual-level microdata from
 ACS.
